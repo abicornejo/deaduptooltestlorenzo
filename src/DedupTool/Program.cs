@@ -12,7 +12,8 @@ internal static class Program
         }
 
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var batch = JsonSerializer.Deserialize<Batch>(File.ReadAllText(args[0]), options)
+        using var input = File.OpenRead(args[0]);
+        var batch = JsonSerializer.Deserialize<Batch>(input, options)
                     ?? throw new InvalidOperationException("Batch file was empty.");
 
         var result = Deduper.Run(batch);
